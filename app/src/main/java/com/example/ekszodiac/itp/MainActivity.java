@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
     }
 
     private File getFile(){
-        File FSFolder = new File("sdcard/camera_app");
+        File FSFolder = new File("sdcard/fishscale");
 
         if(!FSFolder.exists()){
             FSFolder.mkdir();
@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String path = "sdcard/camera_app/test.jpg";
+        String path = "sdcard/fishscale/test.jpg";
         imgView.setImageDrawable(Drawable.createFromPath(path));
     }
 }
