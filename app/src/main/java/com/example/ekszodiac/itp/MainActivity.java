@@ -16,6 +16,7 @@ import java.io.File;
 public class MainActivity extends Activity {
 
     Button FSButton;
+    Button AnaFish;
     ImageView imgView;
     static final int CAM_REQUEST = 1;
 
@@ -23,20 +24,11 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FSButton = (Button) findViewById(R.id.useBut);
-        imgView = (ImageView) findViewById(R.id.imgView);
-        FSButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File file = getFile();
-                camera_intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-                startActivityForResult(camera_intent, CAM_REQUEST);
-            }
-        });
-
+        useCam();
+        anaFish();
     }
 
+    //Save Picture
     private File getFile(){
         File FSFolder = new File("sdcard/fishscale");
 
@@ -49,9 +41,35 @@ public class MainActivity extends Activity {
         return imgFile;
     }
 
+    //Return from Camera
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String path = "sdcard/fishscale/test.jpg";
         imgView.setImageDrawable(Drawable.createFromPath(path));
+    }
+
+    public void useCam(){
+        FSButton = (Button) findViewById(R.id.useBut);
+        imgView = (ImageView) findViewById(R.id.imgView);
+        FSButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File file = getFile();
+                camera_intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                startActivityForResult(camera_intent, CAM_REQUEST);
+            }
+        });
+    }
+
+    public void anaFish(){
+        AnaFish = (Button) findViewById(R.id.analyzeFish);
+        AnaFish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent analyzeFish = new Intent (MainActivity.this, AnalyzeFish.class);
+                startActivity(analyzeFish);
+            }
+        });
     }
 }

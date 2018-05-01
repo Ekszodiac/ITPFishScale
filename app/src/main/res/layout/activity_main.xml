@@ -6,23 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/useBut"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom"
-        android:background="@android:color/holo_green_dark"
-        android:layout_alignParentBottom="true"
-        android:text="Use Camera" />
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/useBut"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center|bottom"
+            android:background="@android:color/holo_green_dark"
+            android:text="Use Camera" />
+
+        <Button
+            android:id="@+id/analyzeFish"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="57dp"
+            android:background="@android:color/holo_green_dark"
+            android:text="Analyze Fish" />
+    </RelativeLayout>
+
 
     <ImageView
         android:id="@+id/imgView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
+        android:layout_height="460dp"
         android:layout_alignParentTop="true"
         android:layout_gravity="center_vertical"
+        android:layout_weight="0"
         android:rotation="90" />
 
 </RelativeLayout>
