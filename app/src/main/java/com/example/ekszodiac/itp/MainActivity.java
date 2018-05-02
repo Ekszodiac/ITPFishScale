@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ public class MainActivity extends Activity {
     Button AnaFish;
     ImageView imgView;
     static final int CAM_REQUEST = 1;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         useCam();
         anaFish();
+        Log.d(TAG, "OpenCV Loaded");
     }
 
     //Save Picture
@@ -48,7 +51,7 @@ public class MainActivity extends Activity {
         imgView.setImageDrawable(Drawable.createFromPath(path));
     }
 
-    public void useCam(){
+    private void useCam(){
         FSButton = (Button) findViewById(R.id.useBut);
         imgView = (ImageView) findViewById(R.id.imgView);
         FSButton.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +65,7 @@ public class MainActivity extends Activity {
         });
     }
 
-    public void anaFish(){
+    private void anaFish(){
         AnaFish = (Button) findViewById(R.id.analyzeFish);
         AnaFish.setOnClickListener(new View.OnClickListener() {
             @Override
