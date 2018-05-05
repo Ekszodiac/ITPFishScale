@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
     //Return from Camera
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String path = "sdcard/fishscale/test.png";
+        String path = "sdcard/fishscale/test.jpg";
         imgView.setImageDrawable(Drawable.createFromPath(path));
     }
 
