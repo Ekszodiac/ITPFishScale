@@ -77,81 +77,10 @@ public class AnalyzeFish extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         testTV = (TextView) findViewById(R.id.testTV);
-        if(compare1() > 0){
-            testTV.setText(compare1());
-        }
-    }
-
-    private int compare1(){
-        List<DMatch> matchList;
-        List<DMatch> matches_final;
-        MatOfDMatch matches_final_mat;
-        List<DMatch> finalMatchesList = new ArrayList<DMatch>();
-        try{
-            //Get file from gallery and change to Bitmap
-            File root = Environment.getExternalStorageDirectory();
-            String capImg = root.getAbsolutePath() + "fishscale/test.jpg";
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            capturedBM = BitmapFactory.decodeFile(capImg, options);
-            Utils.bitmapToMat(capturedBM, capturedMatImg);
-
-            //Get dataset1 and change from Bitmap to Mat
-            Bitmap dataset1= BitmapFactory.decodeResource(getResources(),R.drawable.dataset2);
-            dataset1 = dataset1.copy(Bitmap.Config.ARGB_8888, true);
-            dataMat1 = new Mat();
-            Utils.bitmapToMat(dataset1, dataMat1);
-
-            Imgproc.cvtColor(capturedMatImg, capturedMatImg, Imgproc.COLOR_BGR2RGB);
-            Imgproc.cvtColor(dataMat1, dataMat1, Imgproc.COLOR_BGR2RGB);
-
-            detector = FeatureDetector.create(FeatureDetector.ORB);
-
-            MatOfKeyPoint capturedkeypoints = new MatOfKeyPoint();
-            detector.detect(capturedMatImg, capturedkeypoints);
-            Log.d("FishScale:",  "Captured Keypoints:" + capturedkeypoints.size());
-
-            MatOfKeyPoint keypoints = new MatOfKeyPoint();
-            detector.detect(dataMat1, keypoints);
-            Log.d("FishScale:",  "Keypoints:" + keypoints.size());
-
-
-            Extractor = DescriptorExtractor.create(DescriptorExtractor.ORB);
-            Mat capturedDescriptors = new Mat();
-            Mat sourceDescriptors = new Mat();
-
-            Extractor.compute(capturedMatImg, capturedkeypoints, capturedDescriptors);
-            Log.d("FishScale:", "Captured Descriptors:" + capturedDescriptors.size());
-            Extractor.compute(dataMat1, keypoints, sourceDescriptors);
-            Log.d("FishScale:", "Source Descriptors:" + sourceDescriptors.size());
-
-            matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE);
-            matches = new MatOfDMatch();
-            matcher.match(sourceDescriptors,capturedDescriptors,matches);
-            Log.d("FishScale:", "Size:" + matches.size() );
-
-            matchList = matches.toList();
-            matches_final = new ArrayList<DMatch>();
-
-            for(int i = 0; i < matchList.size(); i++){
-                if(matchList.get(i).distance <= dist_limit){
-                    matches_final.add(matches.toList().get(i));
-                }
-            }
-
-            matches_final_mat = new MatOfDMatch();
-            matches_final_mat.fromList(matches_final);
-            finalMatchesList = matches_final_mat.toList();
-
-
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-
-        return finalMatchesList.size();
 
     }
+
+
 
 
 
