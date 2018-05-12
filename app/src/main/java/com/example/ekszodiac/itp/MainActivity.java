@@ -45,17 +45,17 @@ public class MainActivity extends Activity {
     DescriptorExtractor Extractor;
     DescriptorMatcher matcher;
     MatOfDMatch matches;
-    int dist_limit = 700;
+    int dist_limit = 500;
     TextView testTV;
     Button FSButton;
     Button AnaFish;
     ImageView imgView;
     static final int CAM_REQUEST = 1;
     private static final String TAG = "MainActivity";
-    double comp1 = compare1();
-    double comp2 = compare2();
-    double comp3 = compare3();
-    double comp4 = compare4();
+    int comp1 = compare1();
+    int comp2 = compare2();
+    int comp3 = compare3();
+    int comp4 = compare4();
 
     static {
         if (!OpenCVLoader.initDebug()) {
@@ -129,27 +129,29 @@ public class MainActivity extends Activity {
         AnaFish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String compString1 = Integer.toString(comp2);
 
-                if(compare1() < comp2 && comp1 < comp3 && comp1 < comp4){
+
+                if(compare1() < compare2() && compare1() < compare3() && compare1() < compare4()){
                     Toast.makeText(getApplicationContext(), "Dataset1", Toast.LENGTH_LONG).show();
                 }
-                else if(compare2() < comp3 && comp2 < comp4 && comp2 < comp1){
+                else if (compare2() < compare3() && compare2() < compare4() && compare2() < compare1()){
                     Toast.makeText(getApplicationContext(), "Dataset2", Toast.LENGTH_LONG).show();
                 }
-                else if(compare3() < comp4 && comp3 < comp1 && comp1 < comp2){
+                else if (compare3() < compare4() && compare3() < compare1() && compare3() < compare2()){
                     Toast.makeText(getApplicationContext(), "Dataset3", Toast.LENGTH_LONG).show();
                 }
-                else if(comp4 < comp1 && comp4 < comp2 && comp4 < comp3){
+                else if (compare4() < compare1() && compare4() < compare2() && compare4() < compare3()){
                     Toast.makeText(getApplicationContext(), "Dataset4", Toast.LENGTH_LONG).show();
                 }
-                else if(comp1 == comp2 && comp1 == comp3 && comp1 == comp4){
-                    Toast.makeText(getApplicationContext(), "Wala oy", Toast.LENGTH_LONG).show();
+                else{
+                    Toast.makeText(getApplicationContext(), compString1, Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    double compare1(){
+    int compare1(){
         List<DMatch> matchList;
         List<DMatch> matches_final;
         MatOfDMatch matches_final_mat;
@@ -234,7 +236,7 @@ public class MainActivity extends Activity {
 
     }
 
-    double compare2(){
+    int compare2(){
         List<DMatch> matchList;
         List<DMatch> matches_final;
         MatOfDMatch matches_final_mat;
@@ -319,7 +321,7 @@ public class MainActivity extends Activity {
 
     }
 
-    double compare3(){
+    int compare3(){
         List<DMatch> matchList;
         List<DMatch> matches_final;
         MatOfDMatch matches_final_mat;
@@ -404,7 +406,7 @@ public class MainActivity extends Activity {
 
     }
 
-    double compare4(){
+    int compare4(){
         List<DMatch> matchList;
         List<DMatch> matches_final;
         MatOfDMatch matches_final_mat;
