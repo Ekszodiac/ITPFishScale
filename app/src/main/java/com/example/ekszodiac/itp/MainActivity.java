@@ -1,11 +1,14 @@
 package com.example.ekszodiac.itp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -45,17 +48,14 @@ public class MainActivity extends Activity {
     DescriptorExtractor Extractor;
     DescriptorMatcher matcher;
     MatOfDMatch matches;
-    int dist_limit = 500;
+    int dist_limit = 1000;
     TextView testTV;
     Button FSButton;
     Button AnaFish;
     ImageView imgView;
     static final int CAM_REQUEST = 1;
     private static final String TAG = "MainActivity";
-    int comp1 = compare1();
-    int comp2 = compare2();
-    int comp3 = compare3();
-    int comp4 = compare4();
+    ProgressDialog progressdialog;
 
     static {
         if (!OpenCVLoader.initDebug()) {
@@ -129,7 +129,6 @@ public class MainActivity extends Activity {
         AnaFish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String compString1 = Integer.toString(comp2);
 
 
                 if(compare1() < compare2() && compare1() < compare3() && compare1() < compare4()){
@@ -144,9 +143,14 @@ public class MainActivity extends Activity {
                 else if (compare4() < compare1() && compare4() < compare2() && compare4() < compare3()){
                     Toast.makeText(getApplicationContext(), "Dataset4", Toast.LENGTH_LONG).show();
                 }
-                else{
-                    Toast.makeText(getApplicationContext(), compString1, Toast.LENGTH_LONG).show();
+                else if(compare4() == compare1() && compare4() == compare2() && compare4() == compare3()){
+                    Toast.makeText(getApplicationContext(), "Equal tanan", Toast.LENGTH_LONG).show();
                 }
+                else{
+                    Toast.makeText(getApplicationContext(), "Wa gyud", Toast.LENGTH_LONG).show();
+                }
+
+
             }
         });
     }
@@ -188,7 +192,7 @@ public class MainActivity extends Activity {
             Imgproc.cvtColor(capturedMatImg, capturedMatImg, Imgproc.COLOR_BGR2RGB);
             Imgproc.cvtColor(dataMat1, dataMat1, Imgproc.COLOR_BGR2RGB);
 
-            detector = FeatureDetector.create(FeatureDetector.ORB);
+            detector = FeatureDetector.create(FeatureDetector.BRISK);
 
             MatOfKeyPoint capturedkeypoints = new MatOfKeyPoint();
             detector.detect(capturedMatImg, capturedkeypoints);
@@ -225,13 +229,11 @@ public class MainActivity extends Activity {
             matches_final_mat = new MatOfDMatch();
             matches_final_mat.fromList(matches_final);
             finalMatchesList = matches_final_mat.toList();
-
-
         }
         catch(Exception e){
             e.printStackTrace();
         }
-
+        Log.d("FS Matches size 1", String.valueOf(finalMatchesList.size()));
         return finalMatchesList.size();
 
     }
@@ -273,7 +275,7 @@ public class MainActivity extends Activity {
             Imgproc.cvtColor(capturedMatImg, capturedMatImg, Imgproc.COLOR_BGR2RGB);
             Imgproc.cvtColor(dataMat2, dataMat2, Imgproc.COLOR_BGR2RGB);
 
-            detector = FeatureDetector.create(FeatureDetector.ORB);
+            detector = FeatureDetector.create(FeatureDetector.BRISK);
 
             MatOfKeyPoint capturedkeypoints = new MatOfKeyPoint();
             detector.detect(capturedMatImg, capturedkeypoints);
@@ -316,7 +318,7 @@ public class MainActivity extends Activity {
         catch(Exception e){
             e.printStackTrace();
         }
-
+        Log.d("FS Matches size 2", String.valueOf(finalMatchesList.size()));
         return finalMatchesList.size();
 
     }
@@ -358,7 +360,7 @@ public class MainActivity extends Activity {
             Imgproc.cvtColor(capturedMatImg, capturedMatImg, Imgproc.COLOR_BGR2RGB);
             Imgproc.cvtColor(dataMat3, dataMat3, Imgproc.COLOR_BGR2RGB);
 
-            detector = FeatureDetector.create(FeatureDetector.ORB);
+            detector = FeatureDetector.create(FeatureDetector.BRISK);
 
             MatOfKeyPoint capturedkeypoints = new MatOfKeyPoint();
             detector.detect(capturedMatImg, capturedkeypoints);
@@ -401,7 +403,7 @@ public class MainActivity extends Activity {
         catch(Exception e){
             e.printStackTrace();
         }
-
+        Log.d("FS Matches size 3", String.valueOf(finalMatchesList.size()));
         return finalMatchesList.size();
 
     }
@@ -443,7 +445,7 @@ public class MainActivity extends Activity {
             Imgproc.cvtColor(capturedMatImg, capturedMatImg, Imgproc.COLOR_BGR2RGB);
             Imgproc.cvtColor(dataMat4, dataMat4, Imgproc.COLOR_BGR2RGB);
 
-            detector = FeatureDetector.create(FeatureDetector.ORB);
+            detector = FeatureDetector.create(FeatureDetector.BRISK);
 
             MatOfKeyPoint capturedkeypoints = new MatOfKeyPoint();
             detector.detect(capturedMatImg, capturedkeypoints);
@@ -486,7 +488,7 @@ public class MainActivity extends Activity {
         catch(Exception e){
             e.printStackTrace();
         }
-
+        Log.d("FS Matches size 4", String.valueOf(finalMatchesList.size()));
         return finalMatchesList.size();
 
     }
