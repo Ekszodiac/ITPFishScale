@@ -40,7 +40,7 @@ import java.util.List;
 public class MainActivity extends Activity {
 
     File capturedImg;
-    Mat capturedMatImg;
+    Mat capturedMatImg1, capturedMatImg2, capturedMatImg3, capturedMatImg4;
     Bitmap capturedBM;
     Mat dataMat1, dataMat2, dataMat3, dataMat4;
     ImageView sample;
@@ -48,7 +48,7 @@ public class MainActivity extends Activity {
     DescriptorExtractor Extractor;
     DescriptorMatcher matcher;
     MatOfDMatch matches;
-    int dist_limit = 1000;
+    int dist_limit = 80;
     TextView testTV;
     Button FSButton;
     Button AnaFish;
@@ -131,16 +131,16 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
 
 
-                if(compare1() < compare2() && compare1() < compare3() && compare1() < compare4()){
+                if(compare1() > compare2() && compare1() > compare3() && compare1() > compare4()){
                     Toast.makeText(getApplicationContext(), "Dataset1", Toast.LENGTH_LONG).show();
                 }
-                else if (compare2() < compare3() && compare2() < compare4() && compare2() < compare1()){
+                else if (compare2() > compare3() && compare2() > compare4() && compare2() > compare1()){
                     Toast.makeText(getApplicationContext(), "Dataset2", Toast.LENGTH_LONG).show();
                 }
-                else if (compare3() < compare4() && compare3() < compare1() && compare3() < compare2()){
+                else if (compare3() > compare4() && compare3() > compare1() && compare3() > compare2()){
                     Toast.makeText(getApplicationContext(), "Dataset3", Toast.LENGTH_LONG).show();
                 }
-                else if (compare4() < compare1() && compare4() < compare2() && compare4() < compare3()){
+                else if (compare4() > compare1() && compare4() > compare2() && compare4() > compare3()){
                     Toast.makeText(getApplicationContext(), "Dataset4", Toast.LENGTH_LONG).show();
                 }
                 else if(compare4() == compare1() && compare4() == compare2() && compare4() == compare3()){
@@ -161,7 +161,7 @@ public class MainActivity extends Activity {
         MatOfDMatch matches_final_mat;
         List<DMatch> finalMatchesList = new ArrayList<DMatch>();
         try{
-            capturedMatImg = new Mat();
+            capturedMatImg1 = new Mat();
             dataMat1 = new Mat();
 
             //Get file from gallery and change to Bitmap
@@ -169,12 +169,9 @@ public class MainActivity extends Activity {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             capturedBM = BitmapFactory.decodeFile(capImg, options);
-            if(capturedBM != null){
-                Log.d("Captured Image 1", "Found");
-            }
 
-            Utils.bitmapToMat(capturedBM, capturedMatImg);
-            if(capturedMatImg != null){
+            Utils.bitmapToMat(capturedBM, capturedMatImg1);
+            if(capturedMatImg1 != null){
                 Log.d("Captured Image Mat 1", "Found");
             }
 
@@ -189,13 +186,13 @@ public class MainActivity extends Activity {
                 Log.d("Dataset Image Mat 1", "Found");
             }
 
-            Imgproc.cvtColor(capturedMatImg, capturedMatImg, Imgproc.COLOR_BGR2RGB);
+            Imgproc.cvtColor(capturedMatImg1, capturedMatImg1, Imgproc.COLOR_BGR2RGB);
             Imgproc.cvtColor(dataMat1, dataMat1, Imgproc.COLOR_BGR2RGB);
 
-            detector = FeatureDetector.create(FeatureDetector.BRISK);
+            detector = FeatureDetector.create(FeatureDetector.ORB);
 
             MatOfKeyPoint capturedkeypoints = new MatOfKeyPoint();
-            detector.detect(capturedMatImg, capturedkeypoints);
+            detector.detect(capturedMatImg1, capturedkeypoints);
             Log.d("FishScale:",  "Captured Keypoints 1:" + capturedkeypoints.size());
 
             MatOfKeyPoint keypoints = new MatOfKeyPoint();
@@ -207,7 +204,7 @@ public class MainActivity extends Activity {
             Mat capturedDescriptors = new Mat();
             Mat sourceDescriptors = new Mat();
 
-            Extractor.compute(capturedMatImg, capturedkeypoints, capturedDescriptors);
+            Extractor.compute(capturedMatImg1, capturedkeypoints, capturedDescriptors);
             Log.d("FishScale:", "Captured Descriptors 1:" + capturedDescriptors.size());
             Extractor.compute(dataMat1, keypoints, sourceDescriptors);
             Log.d("FishScale:", "Source Descriptors 1:" + sourceDescriptors.size());
@@ -244,7 +241,7 @@ public class MainActivity extends Activity {
         MatOfDMatch matches_final_mat;
         List<DMatch> finalMatchesList = new ArrayList<DMatch>();
         try{
-            capturedMatImg = new Mat();
+            capturedMatImg2 = new Mat();
             dataMat2 = new Mat();
 
             //Get file from gallery and change to Bitmap
@@ -252,12 +249,9 @@ public class MainActivity extends Activity {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             capturedBM = BitmapFactory.decodeFile(capImg, options);
-            if(capturedBM != null){
-                Log.d("Captured Image 2", "Found");
-            }
 
-            Utils.bitmapToMat(capturedBM, capturedMatImg);
-            if(capturedMatImg != null){
+            Utils.bitmapToMat(capturedBM, capturedMatImg2);
+            if(capturedMatImg2 != null){
                 Log.d("Captured Image Mat 2", "Found");
             }
 
@@ -272,13 +266,13 @@ public class MainActivity extends Activity {
                 Log.d("Dataset Image Mat 2", "Found");
             }
 
-            Imgproc.cvtColor(capturedMatImg, capturedMatImg, Imgproc.COLOR_BGR2RGB);
+            Imgproc.cvtColor(capturedMatImg2, capturedMatImg2, Imgproc.COLOR_BGR2RGB);
             Imgproc.cvtColor(dataMat2, dataMat2, Imgproc.COLOR_BGR2RGB);
 
-            detector = FeatureDetector.create(FeatureDetector.BRISK);
+            detector = FeatureDetector.create(FeatureDetector.ORB);
 
             MatOfKeyPoint capturedkeypoints = new MatOfKeyPoint();
-            detector.detect(capturedMatImg, capturedkeypoints);
+            detector.detect(capturedMatImg2, capturedkeypoints);
             Log.d("FishScale:",  "Captured Keypoints 2:" + capturedkeypoints.size());
 
             MatOfKeyPoint keypoints = new MatOfKeyPoint();
@@ -290,7 +284,7 @@ public class MainActivity extends Activity {
             Mat capturedDescriptors = new Mat();
             Mat sourceDescriptors = new Mat();
 
-            Extractor.compute(capturedMatImg, capturedkeypoints, capturedDescriptors);
+            Extractor.compute(capturedMatImg2, capturedkeypoints, capturedDescriptors);
             Log.d("FishScale:", "Captured Descriptors 2:" + capturedDescriptors.size());
             Extractor.compute(dataMat2, keypoints, sourceDescriptors);
             Log.d("FishScale:", "Source Descriptors 2:" + sourceDescriptors.size());
@@ -329,7 +323,7 @@ public class MainActivity extends Activity {
         MatOfDMatch matches_final_mat;
         List<DMatch> finalMatchesList = new ArrayList<DMatch>();
         try{
-            capturedMatImg = new Mat();
+            capturedMatImg3 = new Mat();
             dataMat3 = new Mat();
 
             //Get file from gallery and change to Bitmap
@@ -341,29 +335,27 @@ public class MainActivity extends Activity {
                 Log.d("Captured Image 3", "Found");
             }
 
-            Utils.bitmapToMat(capturedBM, capturedMatImg);
-            if(capturedMatImg != null){
+            Utils.bitmapToMat(capturedBM, capturedMatImg3);
+            if(capturedMatImg3 != null){
                 Log.d("Captured Image Mat 3", "Found");
             }
 
             //Get dataset1 and change from Bitmap to Mat
             Bitmap dataset1= BitmapFactory.decodeResource(getResources(),R.drawable.dataset3);
             dataset1 = dataset1.copy(Bitmap.Config.ARGB_8888, true);
-            if(dataset1 != null){
-                Log.d("Dataset Image 3", "Found");
-            }
+
             Utils.bitmapToMat(dataset1, dataMat3);
             if(dataMat3 != null){
                 Log.d("Dataset Image Mat 3", "Found");
             }
 
-            Imgproc.cvtColor(capturedMatImg, capturedMatImg, Imgproc.COLOR_BGR2RGB);
+            Imgproc.cvtColor(capturedMatImg3, capturedMatImg3, Imgproc.COLOR_BGR2RGB);
             Imgproc.cvtColor(dataMat3, dataMat3, Imgproc.COLOR_BGR2RGB);
 
-            detector = FeatureDetector.create(FeatureDetector.BRISK);
+            detector = FeatureDetector.create(FeatureDetector.ORB);
 
             MatOfKeyPoint capturedkeypoints = new MatOfKeyPoint();
-            detector.detect(capturedMatImg, capturedkeypoints);
+            detector.detect(capturedMatImg3, capturedkeypoints);
             Log.d("FishScale:",  "Captured Keypoints 3:" + capturedkeypoints.size());
 
             MatOfKeyPoint keypoints = new MatOfKeyPoint();
@@ -375,7 +367,7 @@ public class MainActivity extends Activity {
             Mat capturedDescriptors = new Mat();
             Mat sourceDescriptors = new Mat();
 
-            Extractor.compute(capturedMatImg, capturedkeypoints, capturedDescriptors);
+            Extractor.compute(capturedMatImg3, capturedkeypoints, capturedDescriptors);
             Log.d("FishScale:", "Captured Descriptors 3:" + capturedDescriptors.size());
             Extractor.compute(dataMat3, keypoints, sourceDescriptors);
             Log.d("FishScale:", "Source Descriptors 3:" + sourceDescriptors.size());
@@ -414,7 +406,7 @@ public class MainActivity extends Activity {
         MatOfDMatch matches_final_mat;
         List<DMatch> finalMatchesList = new ArrayList<DMatch>();
         try{
-            capturedMatImg = new Mat();
+            capturedMatImg4 = new Mat();
             dataMat4 = new Mat();
 
             //Get file from gallery and change to Bitmap
@@ -422,12 +414,9 @@ public class MainActivity extends Activity {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             capturedBM = BitmapFactory.decodeFile(capImg, options);
-            if(capturedBM != null){
-                Log.d("Captured Image 4", "Found");
-            }
 
-            Utils.bitmapToMat(capturedBM, capturedMatImg);
-            if(capturedMatImg != null){
+            Utils.bitmapToMat(capturedBM, capturedMatImg4);
+            if(capturedMatImg4 != null){
                 Log.d("Captured Image Mat 4", "Found");
             }
 
@@ -442,13 +431,13 @@ public class MainActivity extends Activity {
                 Log.d("Dataset Image Mat 4", "Found");
             }
 
-            Imgproc.cvtColor(capturedMatImg, capturedMatImg, Imgproc.COLOR_BGR2RGB);
+            Imgproc.cvtColor(capturedMatImg4, capturedMatImg4, Imgproc.COLOR_BGR2RGB);
             Imgproc.cvtColor(dataMat4, dataMat4, Imgproc.COLOR_BGR2RGB);
 
-            detector = FeatureDetector.create(FeatureDetector.BRISK);
+            detector = FeatureDetector.create(FeatureDetector.ORB);
 
             MatOfKeyPoint capturedkeypoints = new MatOfKeyPoint();
-            detector.detect(capturedMatImg, capturedkeypoints);
+            detector.detect(capturedMatImg4, capturedkeypoints);
             Log.d("FishScale:",  "Captured Keypoints 4:" + capturedkeypoints.size());
 
             MatOfKeyPoint keypoints = new MatOfKeyPoint();
@@ -460,7 +449,7 @@ public class MainActivity extends Activity {
             Mat capturedDescriptors = new Mat();
             Mat sourceDescriptors = new Mat();
 
-            Extractor.compute(capturedMatImg, capturedkeypoints, capturedDescriptors);
+            Extractor.compute(capturedMatImg4, capturedkeypoints, capturedDescriptors);
             Log.d("FishScale:", "Captured Descriptors 4:" + capturedDescriptors.size());
             Extractor.compute(dataMat4, keypoints, sourceDescriptors);
             Log.d("FishScale:", "Source Descriptors 4:" + sourceDescriptors.size());
