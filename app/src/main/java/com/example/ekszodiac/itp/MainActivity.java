@@ -11,8 +11,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,6 +35,7 @@ import org.opencv.features2d.FeatureDetector;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
+import java.security.Policy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +59,7 @@ public class MainActivity extends Activity {
     static final int CAM_REQUEST = 1;
     private static final String TAG = "MainActivity";
     ProgressDialog progressdialog;
+
 
     static {
         if (!OpenCVLoader.initDebug()) {
@@ -86,8 +90,15 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        AnaFish = (Button) findViewById(R.id.analyzeFish);
+        File FSFolder = new File("sdcard/fishscale");
+        if(!FSFolder.exists()){
+            AnaFish.setEnabled(false);
+        }
+
         useCam();
         anaFish();
+
     }
 
     //Save Picture
@@ -117,6 +128,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
                 File file = getFile();
                 camera_intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
                 startActivityForResult(camera_intent, CAM_REQUEST);
@@ -340,7 +352,7 @@ public class MainActivity extends Activity {
                 Log.d("Captured Image Mat 3", "Found");
             }
 
-            //Get dataset1 and change from Bitmap to Mat
+            //Get dataset1 from drawables and change from Bitmap to Mat
             Bitmap dataset1= BitmapFactory.decodeResource(getResources(),R.drawable.dataset3);
             dataset1 = dataset1.copy(Bitmap.Config.ARGB_8888, true);
 
