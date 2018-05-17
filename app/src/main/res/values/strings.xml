@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ITP</string>
+    <color name="red">#FF0000</color>
+    <color name="scarlet">#FF2400</color>
 </resources>

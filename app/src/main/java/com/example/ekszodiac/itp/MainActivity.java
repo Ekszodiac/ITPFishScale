@@ -3,6 +3,7 @@ package com.example.ekszodiac.itp;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -42,7 +44,6 @@ import java.util.List;
 
 public class MainActivity extends Activity {
 
-    File capturedImg;
     Mat capturedMatImg1, capturedMatImg2, capturedMatImg3, capturedMatImg4;
     Bitmap capturedBM;
     Mat dataMat1, dataMat2, dataMat3, dataMat4;
@@ -90,10 +91,18 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        imgView = (ImageView) findViewById(R.id.imgView);
         AnaFish = (Button) findViewById(R.id.analyzeFish);
-        File FSFolder = new File("sdcard/fishscale");
+
+        File FSFolder = new File("sdcard/fishscale/test.jpg");
         if(!FSFolder.exists()){
             AnaFish.setEnabled(false);
+        }
+        else{
+            String path = "sdcard/fishscale/test.jpg";
+            imgView.setImageDrawable(Drawable.createFromPath(path));
+            AnaFish.setEnabled(true);
         }
 
         useCam();
@@ -117,8 +126,16 @@ public class MainActivity extends Activity {
     //Return from Camera
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String path = "sdcard/fishscale/test.jpg";
-        imgView.setImageDrawable(Drawable.createFromPath(path));
+        AnaFish = (Button) findViewById(R.id.analyzeFish);
+        File FSFolder = new File("sdcard/fishscale/test.jpg");
+        if(!FSFolder.exists()){
+            AnaFish.setEnabled(false);
+        }
+        else{
+            String path = "sdcard/fishscale/test.jpg";
+            imgView.setImageDrawable(Drawable.createFromPath(path));
+            AnaFish.setEnabled(true);
+        }
     }
 
     private void useCam(){
@@ -128,7 +145,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
                 File file = getFile();
                 camera_intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
                 startActivityForResult(camera_intent, CAM_REQUEST);
@@ -141,19 +157,24 @@ public class MainActivity extends Activity {
         AnaFish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent scaleE;
 
 
                 if(compare1() > compare2() && compare1() > compare3() && compare1() > compare4()){
-                    Toast.makeText(getApplicationContext(), "Dataset1", Toast.LENGTH_LONG).show();
+                    scaleE = new Intent(MainActivity.this, ScaleE.class);
+                    startActivity(scaleE);
                 }
                 else if (compare2() > compare3() && compare2() > compare4() && compare2() > compare1()){
-                    Toast.makeText(getApplicationContext(), "Dataset2", Toast.LENGTH_LONG).show();
+                    scaleE = new Intent(MainActivity.this, ScaleA.class);
+                    startActivity(scaleE);
                 }
                 else if (compare3() > compare4() && compare3() > compare1() && compare3() > compare2()){
-                    Toast.makeText(getApplicationContext(), "Dataset3", Toast.LENGTH_LONG).show();
+                    scaleE = new Intent(MainActivity.this, ScaleB.class);
+                    startActivity(scaleE);
                 }
                 else if (compare4() > compare1() && compare4() > compare2() && compare4() > compare3()){
-                    Toast.makeText(getApplicationContext(), "Dataset4", Toast.LENGTH_LONG).show();
+                    scaleE = new Intent(MainActivity.this, ScaleC.class);
+                    startActivity(scaleE);
                 }
                 else if(compare4() == compare1() && compare4() == compare2() && compare4() == compare3()){
                     Toast.makeText(getApplicationContext(), "Equal tanan", Toast.LENGTH_LONG).show();
@@ -165,6 +186,22 @@ public class MainActivity extends Activity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MainActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+
+
     }
 
     int compare1(){

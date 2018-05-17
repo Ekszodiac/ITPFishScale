@@ -33,6 +33,7 @@ public class HomeActivity extends AppCompatActivity {
                 finally {
                     startActivity(mainIntent);
                     finish();
+                    overridePendingTransition(R.anim.fadein,R.anim.fadeout);
                 }
             }
         };

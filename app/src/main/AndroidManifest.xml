@@ -19,7 +19,8 @@
         <activity android:name=".AnalyzeFish" />
         <activity android:name=".OpenCamera" />
         <activity android:name=".ScaleE" />
-        <activity android:name=".HomeActivity"
+        <activity
+            android:name=".HomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,6 +28,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ScaleC" />
+        <activity android:name=".ScaleA" />
+        <activity android:name=".ScaleB"></activity>
     </application>
 
 </manifest>
