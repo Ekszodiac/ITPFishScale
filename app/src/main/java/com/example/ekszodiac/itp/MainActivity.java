@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +61,12 @@ public class MainActivity extends Activity {
     static final int CAM_REQUEST = 1;
     private static final String TAG = "MainActivity";
     ProgressDialog progressdialog;
+
+    String score = "0";
+
+    Spinner spinner;
+    TextView textview;
+
 
 
     static {
@@ -106,8 +113,15 @@ public class MainActivity extends Activity {
         }
 
         useCam();
-        anaFish();
-
+//      anaFish();
+        AnaFish = (Button) findViewById(R.id.analyzeFish);
+        AnaFish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Analyze runner = new Analyze();
+                runner.execute();
+            }
+        });
     }
 
     //Save Picture
@@ -152,40 +166,101 @@ public class MainActivity extends Activity {
         });
     }
 
-    private void anaFish(){
-        AnaFish = (Button) findViewById(R.id.analyzeFish);
-        AnaFish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent scaleE;
 
+//    private void anaFish(){
+//        AnaFish = (Button) findViewById(R.id.analyzeFish);
+//        AnaFish.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent scaleE;
+//
+//
+//                if(compare1() > compare2() && compare1() > compare3() && compare1() > compare4()){
+//                    scaleE = new Intent(MainActivity.this, ScaleE.class);
+//                    startActivity(scaleE);
+//                }
+//                else if (compare2() > compare3() && compare2() > compare4() && compare2() > compare1()){
+//                    scaleE = new Intent(MainActivity.this, ScaleA.class);
+//                    startActivity(scaleE);
+//                }
+//                else if (compare3() > compare4() && compare3() > compare1() && compare3() > compare2()){
+//                    scaleE = new Intent(MainActivity.this, ScaleB.class);
+//                    startActivity(scaleE);
+//                }
+//                else if (compare4() > compare1() && compare4() > compare2() && compare4() > compare3()){
+//                    scaleE = new Intent(MainActivity.this, ScaleC.class);
+//                    startActivity(scaleE);
+//                }
+//                else if(compare4() == compare1() && compare4() == compare2() && compare4() == compare3()){
+//                    Toast.makeText(getApplicationContext(), "Equal tanan", Toast.LENGTH_LONG).show();
+//                }
+//                else{
+//                    Toast.makeText(getApplicationContext(), "Wa gyud", Toast.LENGTH_LONG).show();
+//                }
+//
+//
+//            }
+//        });
+//    }
 
-                if(compare1() > compare2() && compare1() > compare3() && compare1() > compare4()){
-                    scaleE = new Intent(MainActivity.this, ScaleE.class);
-                    startActivity(scaleE);
-                }
-                else if (compare2() > compare3() && compare2() > compare4() && compare2() > compare1()){
-                    scaleE = new Intent(MainActivity.this, ScaleA.class);
-                    startActivity(scaleE);
-                }
-                else if (compare3() > compare4() && compare3() > compare1() && compare3() > compare2()){
-                    scaleE = new Intent(MainActivity.this, ScaleB.class);
-                    startActivity(scaleE);
-                }
-                else if (compare4() > compare1() && compare4() > compare2() && compare4() > compare3()){
-                    scaleE = new Intent(MainActivity.this, ScaleC.class);
-                    startActivity(scaleE);
-                }
-                else if(compare4() == compare1() && compare4() == compare2() && compare4() == compare3()){
-                    Toast.makeText(getApplicationContext(), "Equal tanan", Toast.LENGTH_LONG).show();
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Wa gyud", Toast.LENGTH_LONG).show();
-                }
-
-
+    public class Analyze extends AsyncTask<String, Void, String> {
+        Context context;
+        Intent scaleE;
+        @Override
+        protected String doInBackground(String... params) {
+            if (compare1() > compare2() && compare1() > compare3() && compare1() > compare4()) {
+                score = "1";
+            } else if (compare2() > compare3() && compare2() > compare4() && compare2() > compare1()) {
+                score = "2";
+            } else if (compare3() > compare4() && compare3() > compare1() && compare3() > compare2()) {
+                score = "3";
+            } else if (compare4() > compare1() && compare4() > compare2() && compare4() > compare3()) {
+                score = "4";
+            } else if (compare4() == compare1() && compare4() == compare2() && compare4() == compare3()) {
+                score = "EQUAL";
+            } else {
+                score = "NO RESULT";
             }
-        });
+
+            return "DONE";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progressdialog.hide();
+            if(score == "1"){
+                scaleE = new Intent(MainActivity.this, ScaleE.class);
+                startActivity(scaleE);
+            }
+            else if(score == "2"){
+                scaleE = new Intent(MainActivity.this, ScaleA.class);
+                startActivity(scaleE);
+            }
+            else if(score == "3"){
+                scaleE = new Intent(MainActivity.this, ScaleB.class);
+                startActivity(scaleE);
+            }
+            else if(score == "4"){
+                scaleE = new Intent(MainActivity.this, ScaleC.class);
+                startActivity(scaleE);
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressdialog = new ProgressDialog(MainActivity.this);
+            progressdialog.setTitle("Analyzing Fish");
+            progressdialog.setMax(30);
+            progressdialog.setProgress(0);
+            progressdialog.setMessage("Fish is being analyzed");
+            progressdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressdialog.show();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+
+        }
     }
 
     @Override
@@ -195,7 +270,8 @@ public class MainActivity extends Activity {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        MainActivity.super.onBackPressed();
+                        finish();
+                        System.exit(0);
                     }
                 })
                 .setNegativeButton("No", null)
