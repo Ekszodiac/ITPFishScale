@@ -36,6 +36,7 @@ import org.opencv.features2d.DescriptorExtractor;
 import org.opencv.features2d.DescriptorMatcher;
 import org.opencv.features2d.FeatureDetector;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.video.BackgroundSubtractorMOG;
 
 import java.io.File;
 import java.security.Policy;
@@ -53,7 +54,7 @@ public class MainActivity extends Activity {
     DescriptorExtractor Extractor;
     DescriptorMatcher matcher;
     MatOfDMatch matches;
-    int dist_limit = 80;
+    int dist_limit = 78;
     TextView testTV;
     Button FSButton;
     Button AnaFish;
@@ -208,18 +209,20 @@ public class MainActivity extends Activity {
         Intent scaleE;
         @Override
         protected String doInBackground(String... params) {
-            if (compare1() > compare2() && compare1() > compare3() && compare1() > compare4()) {
-                score = "1";
-            } else if (compare2() > compare3() && compare2() > compare4() && compare2() > compare1()) {
-                score = "2";
-            } else if (compare3() > compare4() && compare3() > compare1() && compare3() > compare2()) {
-                score = "3";
-            } else if (compare4() > compare1() && compare4() > compare2() && compare4() > compare3()) {
-                score = "4";
-            } else if (compare4() == compare1() && compare4() == compare2() && compare4() == compare3()) {
-                score = "EQUAL";
-            } else {
-                score = "NO RESULT";
+            if (compare2() > compare3()) {
+                if ((compare3() - compare1()) > (compare2() - compare4())) {
+                    score = "1";
+                }
+                else if ((compare3() - compare1()) < (compare2() - compare4())){
+                    score = "2";
+                }
+            } else if (compare2() < compare3()) {
+                if((compare1() + compare2() + compare3())/3 > compare4()){
+                    score = "3";
+                }
+                else if((compare1() + compare2() + compare3())/3 < compare4()){
+                    score = "4";
+                }
             }
 
             return "DONE";
@@ -244,13 +247,14 @@ public class MainActivity extends Activity {
                 scaleE = new Intent(MainActivity.this, ScaleC.class);
                 startActivity(scaleE);
             }
+            finish();
         }
 
         @Override
         protected void onPreExecute() {
             progressdialog = new ProgressDialog(MainActivity.this);
             progressdialog.setTitle("Analyzing Fish");
-            progressdialog.setMax(30);
+            progressdialog.setMax(50);
             progressdialog.setProgress(0);
             progressdialog.setMessage("Fish is being analyzed");
             progressdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -280,6 +284,7 @@ public class MainActivity extends Activity {
 
     }
 
+    //Compare with Scale E
     int compare1(){
         List<DMatch> matchList;
         List<DMatch> matches_final;
@@ -301,7 +306,7 @@ public class MainActivity extends Activity {
             }
 
             //Get dataset1 and change from Bitmap to Mat
-            Bitmap dataset1= BitmapFactory.decodeResource(getResources(),R.drawable.dataset1);
+            Bitmap dataset1= BitmapFactory.decodeResource(getResources(),R.drawable.escale);
             dataset1 = dataset1.copy(Bitmap.Config.ARGB_8888, true);
             if(dataset1 != null){
                 Log.d("Dataset Image 1", "Found");
@@ -360,6 +365,7 @@ public class MainActivity extends Activity {
 
     }
 
+    //Compare with scale A
     int compare2(){
         List<DMatch> matchList;
         List<DMatch> matches_final;
@@ -381,7 +387,7 @@ public class MainActivity extends Activity {
             }
 
             //Get dataset1 and change from Bitmap to Mat
-            Bitmap dataset1= BitmapFactory.decodeResource(getResources(),R.drawable.dataset2);
+            Bitmap dataset1= BitmapFactory.decodeResource(getResources(),R.drawable.ascale);
             dataset1 = dataset1.copy(Bitmap.Config.ARGB_8888, true);
             if(dataset1 != null){
                 Log.d("Dataset Image 2", "Found");
@@ -442,6 +448,7 @@ public class MainActivity extends Activity {
 
     }
 
+    //Compare with Scale B
     int compare3(){
         List<DMatch> matchList;
         List<DMatch> matches_final;
@@ -466,7 +473,7 @@ public class MainActivity extends Activity {
             }
 
             //Get dataset1 from drawables and change from Bitmap to Mat
-            Bitmap dataset1= BitmapFactory.decodeResource(getResources(),R.drawable.dataset3);
+            Bitmap dataset1= BitmapFactory.decodeResource(getResources(),R.drawable.bscale);
             dataset1 = dataset1.copy(Bitmap.Config.ARGB_8888, true);
 
             Utils.bitmapToMat(dataset1, dataMat3);
@@ -525,6 +532,7 @@ public class MainActivity extends Activity {
 
     }
 
+    //Compare with Scale C
     int compare4(){
         List<DMatch> matchList;
         List<DMatch> matches_final;
@@ -546,7 +554,7 @@ public class MainActivity extends Activity {
             }
 
             //Get dataset1 and change from Bitmap to Mat
-            Bitmap dataset1= BitmapFactory.decodeResource(getResources(),R.drawable.dataset4);
+            Bitmap dataset1= BitmapFactory.decodeResource(getResources(),R.drawable.cscale);
             dataset1 = dataset1.copy(Bitmap.Config.ARGB_8888, true);
             if(dataset1 != null){
                 Log.d("Dataset Image 4", "Found");
