@@ -25,5 +25,5 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="253dp"
-        android:text="SCALE E DONG" />
+        android:text="SCALE E" />
 </RelativeLayout>

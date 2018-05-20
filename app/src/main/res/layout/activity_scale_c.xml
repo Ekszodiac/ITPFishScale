@@ -24,6 +24,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="253dp"
-        android:text="SCALE C DONG" />
+        android:text="SCALE C" />
 
 </RelativeLayout>
