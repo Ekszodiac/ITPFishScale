@@ -52,4 +52,15 @@
         android:layout_weight="0"
         android:rotation="90" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Please turn on the flash when using the camera for more accurate results."
+        android:background="@color/scarlet"
+        android:textSize="15dp"
+        android:textAlignment="center"/>
+
 </RelativeLayout>

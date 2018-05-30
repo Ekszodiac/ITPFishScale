@@ -63,6 +63,7 @@ public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
     ProgressDialog progressdialog;
 
+
     String score = "0";
 
     Spinner spinner;
@@ -119,6 +120,7 @@ public class MainActivity extends Activity {
         AnaFish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Analyze runner = new Analyze();
                 runner.execute();
             }
@@ -213,14 +215,14 @@ public class MainActivity extends Activity {
                 if ((compare3() - compare1()) > (compare2() - compare4())) {
                     score = "1";
                 }
-                else if ((compare3() - compare1()) < (compare2() - compare4())){
+                else{
                     score = "2";
                 }
-            } else if (compare2() < compare3()) {
+            } else {
                 if((compare1() + compare2() + compare3())/3 > compare4()){
                     score = "3";
                 }
-                else if((compare1() + compare2() + compare3())/3 < compare4()){
+                else{
                     score = "4";
                 }
             }
@@ -254,7 +256,6 @@ public class MainActivity extends Activity {
         protected void onPreExecute() {
             progressdialog = new ProgressDialog(MainActivity.this);
             progressdialog.setTitle("Analyzing Fish");
-            progressdialog.setMax(50);
             progressdialog.setProgress(0);
             progressdialog.setMessage("Fish is being analyzed");
             progressdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -613,5 +614,13 @@ public class MainActivity extends Activity {
         Log.d("FS Matches size 4", String.valueOf(finalMatchesList.size()));
         return finalMatchesList.size();
 
+    }
+
+    // Get a MemoryInfo object for the device's current memory status.
+    private android.app.ActivityManager.MemoryInfo getAvailableMemory() {
+        android.app.ActivityManager activityManager = (android.app.ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        android.app.ActivityManager.MemoryInfo memoryInfo = new android.app.ActivityManager.MemoryInfo();
+        activityManager.getMemoryInfo(memoryInfo);
+        return memoryInfo;
     }
 }
